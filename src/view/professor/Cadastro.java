@@ -1,23 +1,24 @@
 package view.professor;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
 import java.awt.Font;
-import javax.swing.JTextField;
+
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+
+import controller.professor.ProfessorController;
 
 public class Cadastro extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
+	private JTextField tfNome;
+	private JTextField tfCPF;
+	private JTextField tfArea;
+	private JTextField tfQuantidadePontos;
 
 
 	/**
@@ -32,49 +33,52 @@ public class Cadastro extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblNewLabel_2 = new JLabel("Área de conhecimento");
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel_2.setBounds(413, 77, 153, 32);
-		contentPane.add(lblNewLabel_2);
+		JLabel area = new JLabel("Área de conhecimento");
+		area.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		area.setBounds(413, 77, 153, 32);
+		contentPane.add(area);
 		
-		JLabel lblNewLabel_3 = new JLabel("CPF");
-		lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel_3.setBounds(254, 72, 100, 42);
-		contentPane.add(lblNewLabel_3);
+		JLabel cpf = new JLabel("CPF");
+		cpf.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		cpf.setBounds(254, 72, 100, 42);
+		contentPane.add(cpf);
 		
-		JLabel lblNewLabel = new JLabel("Nome");
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel.setBounds(44, 77, 58, 32);
-		contentPane.add(lblNewLabel);
+		JLabel nome = new JLabel("Nome");
+		nome.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		nome.setBounds(44, 77, 58, 32);
+		contentPane.add(nome);
 		
-		JLabel lblNewLabel_1 = new JLabel("Quantidade de pontos");
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel_1.setBounds(44, 180, 163, 47);
-		contentPane.add(lblNewLabel_1);
+		JLabel Qpontos = new JLabel("Quantidade de pontos");
+		Qpontos.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		Qpontos.setBounds(44, 180, 163, 47);
+		contentPane.add(Qpontos);
 		
-		textField = new JTextField();
-		textField.setBounds(44, 120, 116, 20);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		tfNome = new JTextField();
+		tfNome.setBounds(44, 120, 116, 20);
+		contentPane.add(tfNome);
+		tfNome.setColumns(10);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(254, 120, 100, 20);
-		contentPane.add(textField_1);
-		textField_1.setColumns(10);
+		tfCPF = new JTextField();
+		tfCPF.setBounds(254, 120, 100, 20);
+		contentPane.add(tfCPF);
+		tfCPF.setColumns(10);
 		
-		textField_2 = new JTextField();
-		textField_2.setBounds(413, 120, 153, 20);
-		contentPane.add(textField_2);
-		textField_2.setColumns(10);
+		tfArea = new JTextField();
+		tfArea.setBounds(423, 120, 153, 20);
+		contentPane.add(tfArea);
+		tfArea.setColumns(10);
 		
-		textField_3 = new JTextField();
-		textField_3.setBounds(44, 238, 146, 20);
-		contentPane.add(textField_3);
-		textField_3.setColumns(10);
+		tfQuantidadePontos = new JTextField();
+		tfQuantidadePontos.setBounds(44, 238, 146, 20);
+		contentPane.add(tfQuantidadePontos);
+		tfQuantidadePontos.setColumns(10);
 		
-		JButton btnNewButton = new JButton("Cadastrar");
-		btnNewButton.setBounds(254, 303, 121, 32);
-		contentPane.add(btnNewButton);
-
+		JButton BtnCadastrar = new JButton("Cadastrar");
+		BtnCadastrar.setBounds(254, 303, 121, 32);
+		contentPane.add(BtnCadastrar);
+		
+		ProfessorController pCont = new ProfessorController(tfNome, tfCPF, tfArea, tfQuantidadePontos);
+		BtnCadastrar.addActionListener(pCont);
+		BtnCadastrar.addActionListener(e -> dispose());
 	}
 }
