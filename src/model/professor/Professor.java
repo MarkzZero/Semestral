@@ -7,7 +7,7 @@ public class Professor {
 	private String area;
 	private int Qpontos;
 	
-	public Professor(String area, String nome, String cpf, int Qpontos) {
+	public Professor(String cpf, String nome, String area, int Qpontos) {
 		this.nome = nome;
 		this.cpf = cpf;
 		this.area = area;
@@ -48,7 +48,7 @@ public class Professor {
 
 	@Override
 	public String toString() {
-		return "Professor [nome=" + nome + ", cpf=" + cpf + ", area=" + area + ", Qpontos=" + Qpontos + "]";
+		return "Professor [nome: " + nome + ", cpf: " + cpf + ", area: " + area + ", Qpontos: " + Qpontos + "]";
 	}
 	
 	

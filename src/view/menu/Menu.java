@@ -5,18 +5,24 @@ import view.inscritos.CRUDinscritos;
 import view.professor.CRUDProfessor;
 
 import javax.swing.*;
-import java.awt.event.*;
 import java.awt.Font;
 
 public class Menu extends JFrame {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+
     public Menu() {
         setTitle("Menu Principal");
-        setLocationRelativeTo(null);
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
 
+        // Título
+        JLabel lblNewLabel = new JLabel("Insira uma opção:");
+        lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        lblNewLabel.setBounds(131, 27, 187, 38);
+        getContentPane().add(lblNewLabel);
+
+        // Botões
         JButton btn1 = new JButton("Professores");
         JButton btn2 = new JButton("Disciplinas");
         JButton btn3 = new JButton("Cursos");
@@ -31,24 +37,18 @@ public class Menu extends JFrame {
         getContentPane().add(btn2);
         getContentPane().add(btn3);
         getContentPane().add(btn4);
-        
-        JLabel lblNewLabel = new JLabel("Insira uma opção:");
-        lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        lblNewLabel.setBounds(131, 27, 187, 38);
-        getContentPane().add(lblNewLabel);
 
-        // Eventos dos botões
+        // Ações dos botões
         btn1.addActionListener(e -> new CRUDProfessor().setVisible(true));
         btn2.addActionListener(e -> new CRUDdisciplinas().setVisible(true));
         btn3.addActionListener(e -> new CRUDcursos().setVisible(true));
         btn4.addActionListener(e -> new CRUDinscritos().setVisible(true));
-        
-        
-
     }
 
     public static void main(String[] args) {
-        new Menu().setVisible(true);
+        Menu menu = new Menu();
+        menu.setLocationRelativeTo(null); 
+        menu.setVisible(true);
     }
 }
 

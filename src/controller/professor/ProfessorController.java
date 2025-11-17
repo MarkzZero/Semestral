@@ -1,30 +1,43 @@
 package controller.professor;
 
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import controller.arquivos.ArquivosController;
-
+import lista.Lista;
+import model.professor.Professor;
+import view.professor.CRUDProfessor;
+import view.professor.Consulta;
 public class ProfessorController implements ActionListener{
 	private JTextField tfNome;
 	private JTextField tfCPF;
 	private JTextField tfArea;
-	private JTextField tfQuantidadePontos;
+	private JTextField tfPontos;
+	
+    CRUDProfessor tela;
+    
 
 	public ProfessorController(JTextField nome, JTextField cpf, JTextField area, JTextField qpontos) {
 		super();
 		tfNome = nome;
 		tfCPF = cpf;
 		tfArea = area;
-		tfQuantidadePontos = qpontos;
+		tfPontos = qpontos;
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
+	
+	
+	public void actionPerformed(ActionEvent e){
 		String cmd = e.getActionCommand();
 		
 		if(cmd.equals("Cadastrar")) {
@@ -36,51 +49,275 @@ public class ProfessorController implements ActionListener{
 		if(cmd.equals("Deletar")) {
 			deletar();
 		}
+		if(cmd.equals("Consultar")) {
+			try {
+				consultar();
+			} catch (Exception e1) {
+				JOptionPane.showMessageDialog(null, e);
+			}
+		}
 	}
 
+	private void consultar() throws Exception {
+		String cpf = tfCPF.getText().trim();
+		
+		Professor encontrado = buscarProfessor(cpf);
+		
+		try {
+			if(encontrado != null) {
+				Consulta tela = new Consulta(encontrado);
+				tela.setVisible(true);
+			}
+		}catch(Exception e) {
+			JOptionPane.showMessageDialog(null, e, null, JOptionPane.WARNING_MESSAGE);
+		}
+
+	}
+
+
+
 	private void deletar() {
-		// TODO Auto-generated method stub
+		String dir = "C:\\temp";
+		String fileName = "professor.csv";
+		String cpf = tfCPF.getText().trim();
+		
+		try {
+			Lista<Professor> lista = readFile(dir, fileName);
+			int tamanho = lista.size();
+			for(int i = 0; i < tamanho; i++) {
+				if(lista.get(i).getCpf().equals(cpf)) {
+					lista.remove(i);
+					break;
+				}
+			}
+			
+			salvarLista(dir, fileName, lista);
+			JOptionPane.showMessageDialog(null, "Professor removido com sucesso!");
+		}catch(Exception e) {
+			JOptionPane.showMessageDialog(null, e);
+			e.printStackTrace();
+		}
+		
 		
 	}
 
 	private void editar() {
-		// TODO Auto-generated method stub
+		String dir = "C:\\temp";
+		String fileName = "professor.csv";
 		
+		String cpf = tfCPF.getText().trim();
+		String nome = tfNome.getText().trim();
+		String area = tfArea.getText().trim();
+		String pontosStr = tfPontos.getText().trim();
+		
+	    if (nome.isEmpty() || cpf.isEmpty() || area.isEmpty() || pontosStr.isEmpty()) {
+	        JOptionPane.showMessageDialog(null, "Preencha todos os campos!");
+	        return;
+	    }
+	    
+	    int pontos = Integer.parseInt(pontosStr);
+	    
+	    try {
+	    	Lista<Professor> lista = readFile(dir, fileName);
+	    	int tamanho = lista.size();
+	    	
+	    	for(int i = 0; i < tamanho; i++) {
+	    		Professor p = lista.get(i);
+	    		if(p.getCpf().equals(cpf)) {
+	    			p.setNome(nome);
+	    			p.setArea(area);
+	    			p.setQpontos(pontos);
+	    		}
+	    	
+	    	}
+    		salvarLista(dir, fileName, lista);
+    		JOptionPane.showMessageDialog(null, "Professor atualizado com sucesso!");
+	    }catch(Exception e) {
+	    	JOptionPane.showMessageDialog(null, e);
+	    	e.printStackTrace();
+	    }
 	}
 
 	private void cadastro() {
 	    String nome = tfNome.getText().trim();
 	    String cpf = tfCPF.getText().trim();
 	    String area = tfArea.getText().trim();
-	    String pontosStr = tfQuantidadePontos.getText().trim();
+	    String pontosStr = tfPontos.getText().trim();
 
-	    if (nome.isEmpty() || cpf.isEmpty() || area.isEmpty() || pontosStr.isEmpty()) {
-	        JOptionPane.showMessageDialog(null, "Preencha todos os campos antes de cadastrar.", "Aviso", JOptionPane.WARNING_MESSAGE);
-	        return;
+	    if (nome.equals("Nome") || cpf.equals("___.___.___-__") || cpf.equals("Área de conhecimento") || pontosStr.equals("Quantidade de Pontos")){
+	    	JOptionPane.showMessageDialog(null, "Preencha todos os campos!" , "Aviso", JOptionPane.WARNING_MESSAGE);
+	    	return;
 	    }
 
 	    int Qpontos;
 	    try {
 	        Qpontos = Integer.parseInt(pontosStr);
 	    } catch (NumberFormatException e) {
-	        JOptionPane.showMessageDialog(null, "Quantidade de pontos deve ser um número válido.", "Erro", JOptionPane.ERROR_MESSAGE);
+	        JOptionPane.showMessageDialog(null, "Quantidade de pontos deve ser um número válido.", "Aviso", JOptionPane.WARNING_MESSAGE);
 	        return;
 	    }
 
-	    ArquivosController arq = new ArquivosController();
 	    String dir = "C:\\temp";
 	    String ArqNome = "professor.csv";
 	    String conteudo = cpf + ";" + nome + ";" + area + ";" + Qpontos + "\n";
 	    
 	    try {
-			arq.createFile(dir, ArqNome, conteudo);
-		} catch (IOException e) {
+	    	Lista<Professor> lista = readFile(dir, ArqNome);
+	    	int tamanho = lista.size();
+	    	
+	    	for(int i = 0; i < tamanho; i++) {
+	    		Professor p = lista.get(i);
+	    		
+	    		if(p.getCpf().equals(cpf)) {
+	    			JOptionPane.showMessageDialog(null, "Professor já cadastrado!");
+	    			return;
+	    		}
+	    	}
+	    }catch(Exception e) {
+	    	e.printStackTrace();
+	    }
+	    
+	    try {
+	        createFile(dir, ArqNome, conteudo);
+	        JOptionPane.showMessageDialog(null, "Professor cadastrado com sucesso!");
+	        tela.limparCampos();
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        JOptionPane.showMessageDialog(null, e);	
+	    }
+	}
+	
+	private void salvarLista(String dir, String fileName, Lista<Professor> lista) throws Exception{
+		File file = new File(dir, fileName);
+		FileWriter fw = new FileWriter(file, false);
+		PrintWriter pw = new PrintWriter(fw);
+		int tamanho = lista.size();
+		
+		for(int i = 0; i < tamanho; i++) {
+			Professor p = lista.get(i);
+			pw.println(p.getCpf() + ";" +p.getNome() + ";" + p.getArea() + ";" + p.getQpontos());
+		}
+		
+		pw.flush();
+		pw.close();
+		fw.close();
+	}
+	
+	private Professor buscarProfessor(String cpf) {
+		String dir = "C:\\temp";
+		String fileName = "professor.csv";
+		
+		try {
+			Lista<Professor> lista = readFile(dir, fileName);
+			int tamanho = lista.size();
+			for(int i = 0; i < tamanho; i++) {
+				Professor p = lista.get(i);
+				if(p.getCpf().equals(cpf)) {
+					return p;
+				}
+			}
+		}catch(Exception e) {
 			e.printStackTrace();
 		}
-	    
-
-	    JOptionPane.showMessageDialog(null, "Professor cadastrado com sucesso!");
+		
+		return null;
 	}
+	
+	
+	// Manipulação de arquivos
+	
+	public void readDir(String path) throws IOException {
+		File dir = new File(path);
+		if(dir.exists() && dir.isDirectory()) {
+			File[] file = dir.listFiles();
+			for(File f : file) {
+				if(f.isFile()) {
+					System.out.println("     \t"+f.getName());
+				}else {
+					System.out.println("<DIR>\t"+f.getName());
+				}
+			}
+		}else{
+			throw new IOException("Diretório inválido!");
+		}
+	}
+
+	
+	public void createFile(String path, String nome, String conteudo) throws IOException {
+		File dir = new File(path);
+		File file = new File(path, nome);
+		if (dir.exists() && dir.isDirectory()) {
+			boolean existe = false;
+			if(file.exists()) {
+				existe = true;
+			}
+			FileWriter fileWriter = new FileWriter(file, existe);
+			PrintWriter print = new PrintWriter(fileWriter);
+			print.write(conteudo);
+			print.flush(); 
+			print.close();
+			fileWriter.close();
+		}else {
+			throw new IOException("Diretório inválido");
+		}
+		
+	}
+
+	public Lista<Professor> readFile(String path, String nome) throws IOException {
+	    File file = new File(path, nome);
+	    Lista<Professor> listaProfessor = new Lista<>();
+
+	    if(file.exists()) {
+	        FileInputStream fluxo = new FileInputStream(file);
+	        InputStreamReader leitor = new InputStreamReader(fluxo);
+	        BufferedReader buffer = new BufferedReader(leitor);
+
+	        String linha = buffer.readLine();
+	        while(linha != null) {
+	            String[] campos = linha.split(";");
+	            String cpf = campos[0];
+	            String nomeProf = campos[1];
+	            String area = campos[2];
+	            int pontos = Integer.parseInt(campos[3]);
+
+	            Professor professor = new Professor(cpf, nomeProf, area, pontos);
+
+	            if(listaProfessor.isEmpty()) {
+	                listaProfessor.addFirst(professor);
+	            } else {
+	                try {
+						listaProfessor.addLast(professor);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+	            }
+
+	            linha = buffer.readLine();
+	        }
+
+	        buffer.close();
+	        leitor.close();
+	        fluxo.close();
+
+	        return listaProfessor;
+
+	    } else {
+	        throw new IOException("Diretório inválido!!");
+	    }
+	}
+
+	
+	public void openFile(String path, String nome) throws IOException {
+		File file = new File(path, nome);
+		if(file.exists() && file.isFile()) {
+			Desktop desktop = Desktop.getDesktop();
+			desktop.open(file);
+		}else {
+			throw new IOException("Arquivo inválido!");
+		}
+		
+	}
+	
 
 
 }
