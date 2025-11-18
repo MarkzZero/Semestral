@@ -23,8 +23,8 @@ public class Cadastro extends JFrame {
     private JTextField codCurso;
     private JFormattedTextField txtHorario; 
     private JButton btnCadastrar;
-    private JTextField DiaSemana;
-    private JTextField QntHoras;
+    private JTextField textField;
+    private JTextField textField_1;
 
     public Cadastro() {
     	setTitle("Cadastro");
@@ -75,12 +75,12 @@ public class Cadastro extends JFrame {
         contentPane.add(codCurso);
         codCurso.setColumns(10);
         
-//        try {
-//            MaskFormatter mascaraData = new MaskFormatter("##/##/####");
-//            mascaraData.setPlaceholderCharacter('_');
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            MaskFormatter mascaraData = new MaskFormatter("##/##/####");
+            mascaraData.setPlaceholderCharacter('_');
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
 
         try {
@@ -90,19 +90,19 @@ public class Cadastro extends JFrame {
             txtHorario.setBounds(55, 160, 86, 20);
             contentPane.add(txtHorario);
             
-            btnCadastrar = new JButton("Cadastrar");
+            btnCadastrar = new JButton("Cadastro");
             btnCadastrar.setBounds(189, 254, 105, 23);
             contentPane.add(btnCadastrar);
             
-            DiaSemana = new JTextField();
-            DiaSemana.setBounds(352, 76, 122, 20);
-            contentPane.add(DiaSemana);
-            DiaSemana.setColumns(10);
+            textField = new JTextField();
+            textField.setBounds(352, 76, 122, 20);
+            contentPane.add(textField);
+            textField.setColumns(10);
             
-            QntHoras = new JTextField();
-            QntHoras.setBounds(181, 160, 140, 20);
-            contentPane.add(QntHoras);
-            QntHoras.setColumns(10);
+            textField_1 = new JTextField();
+            textField_1.setBounds(181, 160, 140, 20);
+            contentPane.add(textField_1);
+            textField_1.setColumns(10);
             
             JLabel lblNewLabel_5 = new JLabel("Quantidade de horas diárias");
             lblNewLabel_5.setBounds(181, 135, 140, 16);
@@ -111,7 +111,7 @@ public class Cadastro extends JFrame {
             e.printStackTrace();
         }
         
-        disciplinaController discCtrl = new disciplinaController(codCurso, nomeDisciplina, codCurso, txtHorario, DiaSemana, QntHoras);
+        disciplinaController discCtrl = new disciplinaController(codCurso, codCurso, codCurso, txtHorario, txtHorario);
         btnCadastrar.addActionListener(discCtrl);
         btnCadastrar.addActionListener(e -> dispose());
     }

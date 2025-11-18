@@ -1,4 +1,4 @@
-package view.inscritos;
+package view.professor;
 
 import java.awt.EventQueue;
 
@@ -6,48 +6,38 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
-public class Cadastro extends JFrame {
+public class Delete extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textField;
-	private JTextField textField_1;
 
-	public Cadastro() {
-		setTitle("Cadastro");
+	public Delete() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 391, 358);
+		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("CPF do professor");
+		JLabel lblNewLabel = new JLabel("Insira o CPF do professor a ser deletado:");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel.setBounds(30, 63, 119, 28);
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setBounds(10, 36, 262, 31);
 		contentPane.add(lblNewLabel);
 		
 		textField = new JTextField();
-		textField.setBounds(30, 90, 119, 20);
+		textField.setBounds(20, 78, 252, 20);
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(214, 90, 125, 20);
-		contentPane.add(textField_1);
-		textField_1.setColumns(10);
-		
-		JLabel lblNewLabel_1 = new JLabel("Código de disciplina");
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel_1.setBounds(214, 63, 125, 23);
-		contentPane.add(lblNewLabel_1);
-		
-		JButton btnNewButton = new JButton("Cadastrar");
-		btnNewButton.setBounds(142, 189, 89, 23);
+		JButton btnNewButton = new JButton("Deletar");
+		btnNewButton.setBounds(183, 182, 89, 23);
 		contentPane.add(btnNewButton);
 
 	}

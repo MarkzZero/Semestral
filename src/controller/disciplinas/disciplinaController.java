@@ -14,19 +14,17 @@ public class disciplinaController implements ActionListener {
     private JTextField codDisciplina;
     private JTextField nomeDisciplina;
     private JTextField codCurso;
+    private JFormattedTextField txtData;
     private JFormattedTextField txtHorario; 
-    private JTextField DiaSemana;
-    private JTextField QntHoras;
-    
 
-	public disciplinaController(JTextField codDisciplina, JTextField nomeDisciplina, JTextField codCurso, JFormattedTextField txtHorario, JTextField DiaSemana, JTextField QntHoras) {
+	public disciplinaController(JTextField codDisciplina, JTextField nomeDisciplina, JTextField codCurso,
+			JFormattedTextField txtData, JFormattedTextField txtHorario) {
 		super();
 		this.codDisciplina = codDisciplina;
 		this.nomeDisciplina = nomeDisciplina;
 		this.codCurso = codCurso;
+		this.txtData = txtData;
 		this.txtHorario = txtHorario;
-		this.DiaSemana = DiaSemana;
-		this.QntHoras = QntHoras;
 	}
 	
 	@Override
@@ -58,22 +56,14 @@ public class disciplinaController implements ActionListener {
 		String codDisc = codDisciplina.getText().trim();
 		String nome = nomeDisciplina.getText().trim();
 		String codCur = codCurso.getText().trim();
+		String data = txtData.getText().trim();
 		String horario = txtHorario.getText().trim();
-		String dia = DiaSemana.getText().trim();
-		String horas = QntHoras.getText().trim();
-		
+	
 	    ArquivosController arq = new ArquivosController();
 	    
-	    String nomeArq = "disciplinas.csv";
-	    String conteudo = codDisc + ";" + nome + ";" + dia + ";" + horario + ";" + horas + ";" + codCur;
-	    
-	    try {
-	    	arq.createFile(nomeArq, conteudo);
-	    	JOptionPane.showMessageDialog(null, "Disciplina cadastrada com sucesso!");
-	    }catch(Exception e) {
-	    	e.printStackTrace();
-	    	JOptionPane.showMessageDialog(null, "Diretório inválido!");
-	    }
+	    String dir = "C:\\temp";
+	    String fileName = "disciplinas.csv";
+	    String conteudo = codDisc + ";" + nome + ";" + data;
 	    
 	    
 	    

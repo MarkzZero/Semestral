@@ -1,22 +1,21 @@
 package view.cursos;
-import java.awt.Font;
+import java.awt.EventQueue;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-
-import controller.curso.CursoController;
+import javax.swing.JLabel;
+import java.awt.Font;
+import javax.swing.JTextField;
+import javax.swing.JButton;
 
 public class Cadastro extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField codCurso;
-	private JTextField NomeCurso;
-	private JTextField Area;
+	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField textField_2;
 
 	public Cadastro() {
 		setTitle("Cadastro");
@@ -32,39 +31,34 @@ public class Cadastro extends JFrame {
 		lblNewLabel.setBounds(28, 61, 107, 24);
 		contentPane.add(lblNewLabel);
 		
-		codCurso = new JTextField();
-		codCurso.setBounds(28, 95, 107, 20);
-		contentPane.add(codCurso);
-		codCurso.setColumns(10);
+		textField = new JTextField();
+		textField.setBounds(28, 95, 107, 20);
+		contentPane.add(textField);
+		textField.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("Nome do curso");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblNewLabel_1.setBounds(213, 68, 100, 14);
 		contentPane.add(lblNewLabel_1);
 		
-		NomeCurso = new JTextField();
-		NomeCurso.setBounds(213, 95, 100, 20);
-		contentPane.add(NomeCurso);
-		NomeCurso.setColumns(10);
+		textField_1 = new JTextField();
+		textField_1.setBounds(213, 95, 100, 20);
+		contentPane.add(textField_1);
+		textField_1.setColumns(10);
 		
 		JLabel lblNewLabel_2 = new JLabel("Área de conhecimento");
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblNewLabel_2.setBounds(28, 144, 137, 24);
 		contentPane.add(lblNewLabel_2);
 		
-		Area = new JTextField();
-		Area.setBounds(184, 148, 130, 20);
-		contentPane.add(Area);
-		Area.setColumns(10);
+		textField_2 = new JTextField();
+		textField_2.setBounds(184, 148, 130, 20);
+		contentPane.add(textField_2);
+		textField_2.setColumns(10);
 		
-		JButton btnCadastrar = new JButton("Cadastrar");
-		btnCadastrar.setBounds(158, 206, 107, 23);
-		contentPane.add(btnCadastrar);
-		
-		CursoController cursoCtrl = new CursoController(codCurso, NomeCurso, Area);
-		
-		btnCadastrar.addActionListener(cursoCtrl);
-		btnCadastrar.addActionListener(e -> dispose());
+		JButton btnNewButton = new JButton("Cadastrar");
+		btnNewButton.setBounds(158, 206, 107, 23);
+		contentPane.add(btnNewButton);
 
 	}
 }
