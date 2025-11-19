@@ -90,6 +90,7 @@ public class CRUDProfessor extends JFrame {
 		btnLimpar.addActionListener(e -> limparCampos());
 		btnConsultar.addActionListener(profCtrl);
 		
+		profCtrl.setTela(this);
 	}
 	
 	

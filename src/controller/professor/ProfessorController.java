@@ -26,7 +26,9 @@ public class ProfessorController implements ActionListener{
 	
     CRUDProfessor tela;
     
-
+    final String path = "C:\\temp";
+    
+    
 	public ProfessorController(JTextField nome, JTextField cpf, JTextField area, JTextField qpontos) {
 		super();
 		tfNome = nome;
@@ -35,7 +37,9 @@ public class ProfessorController implements ActionListener{
 		tfPontos = qpontos;
 	}
 
-	
+	public void setTela(CRUDProfessor tela) {
+		this.tela = tela;
+	}
 	
 	public void actionPerformed(ActionEvent e){
 		String cmd = e.getActionCommand();
@@ -77,12 +81,11 @@ public class ProfessorController implements ActionListener{
 
 
 	private void deletar() {
-		String dir = "C:\\temp";
 		String fileName = "professor.csv";
 		String cpf = tfCPF.getText().trim();
 		
 		try {
-			Lista<Professor> lista = readFile(dir, fileName);
+			Lista<Professor> lista = readFile(fileName);
 			int tamanho = lista.size();
 			for(int i = 0; i < tamanho; i++) {
 				if(lista.get(i).getCpf().equals(cpf)) {
@@ -91,7 +94,7 @@ public class ProfessorController implements ActionListener{
 				}
 			}
 			
-			salvarLista(dir, fileName, lista);
+			salvarLista(fileName, lista);
 			JOptionPane.showMessageDialog(null, "Professor removido com sucesso!");
 		}catch(Exception e) {
 			JOptionPane.showMessageDialog(null, e);
@@ -102,7 +105,6 @@ public class ProfessorController implements ActionListener{
 	}
 
 	private void editar() {
-		String dir = "C:\\temp";
 		String fileName = "professor.csv";
 		
 		String cpf = tfCPF.getText().trim();
@@ -118,7 +120,7 @@ public class ProfessorController implements ActionListener{
 	    int pontos = Integer.parseInt(pontosStr);
 	    
 	    try {
-	    	Lista<Professor> lista = readFile(dir, fileName);
+	    	Lista<Professor> lista = readFile(fileName);
 	    	int tamanho = lista.size();
 	    	
 	    	for(int i = 0; i < tamanho; i++) {
@@ -130,7 +132,7 @@ public class ProfessorController implements ActionListener{
 	    		}
 	    	
 	    	}
-    		salvarLista(dir, fileName, lista);
+    		salvarLista(fileName, lista);
     		JOptionPane.showMessageDialog(null, "Professor atualizado com sucesso!");
 	    }catch(Exception e) {
 	    	JOptionPane.showMessageDialog(null, e);
@@ -157,12 +159,11 @@ public class ProfessorController implements ActionListener{
 	        return;
 	    }
 
-	    String dir = "C:\\temp";
 	    String ArqNome = "professor.csv";
 	    String conteudo = cpf + ";" + nome + ";" + area + ";" + Qpontos + "\n";
 	    
 	    try {
-	    	Lista<Professor> lista = readFile(dir, ArqNome);
+	    	Lista<Professor> lista = readFile(ArqNome);
 	    	int tamanho = lista.size();
 	    	
 	    	for(int i = 0; i < tamanho; i++) {
@@ -178,7 +179,7 @@ public class ProfessorController implements ActionListener{
 	    }
 	    
 	    try {
-	        createFile(dir, ArqNome, conteudo);
+	        createFile(ArqNome, conteudo);
 	        JOptionPane.showMessageDialog(null, "Professor cadastrado com sucesso!");
 	        tela.limparCampos();
 	    } catch (IOException e) {
@@ -187,8 +188,8 @@ public class ProfessorController implements ActionListener{
 	    }
 	}
 	
-	private void salvarLista(String dir, String fileName, Lista<Professor> lista) throws Exception{
-		File file = new File(dir, fileName);
+	private void salvarLista(String fileName, Lista<Professor> lista) throws Exception{
+		File file = new File(path, fileName);
 		FileWriter fw = new FileWriter(file, false);
 		PrintWriter pw = new PrintWriter(fw);
 		int tamanho = lista.size();
@@ -204,11 +205,10 @@ public class ProfessorController implements ActionListener{
 	}
 	
 	private Professor buscarProfessor(String cpf) {
-		String dir = "C:\\temp";
 		String fileName = "professor.csv";
 		
 		try {
-			Lista<Professor> lista = readFile(dir, fileName);
+			Lista<Professor> lista = readFile(fileName);
 			int tamanho = lista.size();
 			for(int i = 0; i < tamanho; i++) {
 				Professor p = lista.get(i);
@@ -226,7 +226,7 @@ public class ProfessorController implements ActionListener{
 	
 	// Manipulação de arquivos
 	
-	public void readDir(String path) throws IOException {
+	public void readDir() throws IOException {
 		File dir = new File(path);
 		if(dir.exists() && dir.isDirectory()) {
 			File[] file = dir.listFiles();
@@ -243,7 +243,7 @@ public class ProfessorController implements ActionListener{
 	}
 
 	
-	public void createFile(String path, String nome, String conteudo) throws IOException {
+	public void createFile(String nome, String conteudo) throws IOException {
 		File dir = new File(path);
 		File file = new File(path, nome);
 		if (dir.exists() && dir.isDirectory()) {
@@ -263,7 +263,7 @@ public class ProfessorController implements ActionListener{
 		
 	}
 
-	public Lista<Professor> readFile(String path, String nome) throws IOException {
+	public Lista<Professor> readFile(String nome) throws IOException {
 	    File file = new File(path, nome);
 	    Lista<Professor> listaProfessor = new Lista<>();
 
@@ -307,7 +307,7 @@ public class ProfessorController implements ActionListener{
 	}
 
 	
-	public void openFile(String path, String nome) throws IOException {
+	public void openFile(String nome) throws IOException {
 		File file = new File(path, nome);
 		if(file.exists() && file.isFile()) {
 			Desktop desktop = Desktop.getDesktop();
