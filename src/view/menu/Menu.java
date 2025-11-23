@@ -1,48 +1,69 @@
 package view.menu;
+import java.awt.Font;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+
 import view.cursos.CRUDcursos;
 import view.disciplinas.CRUDdisciplinas;
+import view.disciplinas.ProcessosAbertos;
 import view.inscritos.CRUDinscritos;
 import view.professor.CRUDProfessor;
-
-import javax.swing.*;
-import java.awt.Font;
 
 public class Menu extends JFrame {
     private static final long serialVersionUID = 1L;
 
     public Menu() {
         setTitle("Menu Principal");
-        setSize(400, 300);
+        setSize(400, 325);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
-
-        // Título
-        JLabel lblNewLabel = new JLabel("Insira uma opção:");
-        lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        lblNewLabel.setBounds(131, 27, 187, 38);
-        getContentPane().add(lblNewLabel);
-
-        // Botões
-        JButton btn1 = new JButton("Professores");
-        JButton btn2 = new JButton("Disciplinas");
-        JButton btn3 = new JButton("Cursos");
-        JButton btn4 = new JButton("Inscritos");
-
-        btn1.setBounds(29, 90, 120, 30);
-        btn2.setBounds(227, 90, 120, 30);
-        btn3.setBounds(29, 173, 120, 30);
-        btn4.setBounds(227, 173, 120, 30);
-
-        getContentPane().add(btn1);
-        getContentPane().add(btn2);
-        getContentPane().add(btn3);
-        getContentPane().add(btn4);
-
-        // Ações dos botões
-        btn1.addActionListener(e -> new CRUDProfessor().setVisible(true));
-        btn2.addActionListener(e -> new CRUDdisciplinas().setVisible(true));
-        btn3.addActionListener(e -> new CRUDcursos().setVisible(true));
-        btn4.addActionListener(e -> new CRUDinscritos().setVisible(true));
+        
+        JPanel panel = new JPanel();
+        panel.setBounds(0, 0, 384, 307);
+        getContentPane().add(panel);
+        panel.setLayout(null);
+        
+        JLabel lblNewLabel = new JLabel("Escolha uma opção");
+        lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        lblNewLabel.setFont(new Font("Segoe UI Semibold", Font.PLAIN, 15));
+        lblNewLabel.setBounds(114, 29, 142, 43);
+        panel.add(lblNewLabel);
+        
+        JButton btnProfessor = new JButton("Professores");
+        btnProfessor.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        btnProfessor.setBounds(40, 94, 110, 33);
+        panel.add(btnProfessor);
+        
+        JButton btnDisciplina = new JButton("Disciplinas");
+        btnDisciplina.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        btnDisciplina.setBounds(235, 94, 110, 33);
+        panel.add(btnDisciplina);
+        
+        JButton btnCurso = new JButton("Cursos");
+        btnCurso.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        btnCurso.setBounds(40, 173, 110, 33);
+        panel.add(btnCurso);
+        
+        JButton btnInscrito = new JButton("Inscritos");
+        btnInscrito.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        btnInscrito.setBounds(235, 173, 110, 33);
+        panel.add(btnInscrito);
+        
+        JButton btnProcessos = new JButton("Processos abertos");
+        btnProcessos.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        btnProcessos.setBounds(114, 227, 142, 34);
+        panel.add(btnProcessos);
+        
+        btnProfessor.addActionListener(e -> new CRUDProfessor().setVisible(true));
+        btnDisciplina.addActionListener(e -> new CRUDdisciplinas().setVisible(true));
+        btnCurso.addActionListener(e -> new CRUDcursos().setVisible(true));
+        btnInscrito.addActionListener(e -> new CRUDinscritos().setVisible(true));
+        btnProcessos.addActionListener(e -> new ProcessosAbertos(). setVisible(true));
+      
     }
 
     public static void main(String[] args) {

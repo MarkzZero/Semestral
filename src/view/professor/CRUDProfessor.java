@@ -25,7 +25,7 @@ public class CRUDProfessor extends JFrame {
 	
 	
 	public CRUDProfessor() {
-		setTitle("Professor");
+		setTitle("Cadastro");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 429, 300);
 		contentPane = new JPanel();
@@ -65,7 +65,7 @@ public class CRUDProfessor extends JFrame {
 		contentPane.add(tfPontos);
 		tfPontos.setColumns(10);
 		
-		JButton btnConsultar = new JButton("Consultar");
+		JButton btnConsultar = new JButton("Buscar professor");
 		btnConsultar.setFont(new Font("Segoe UI", Font.PLAIN, 11));
 		btnConsultar.setBounds(215, 23, 157, 32);
 		contentPane.add(btnConsultar);

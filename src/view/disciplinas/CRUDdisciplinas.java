@@ -1,19 +1,18 @@
 package view.disciplinas;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.MaskFormatter;
 
-import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
+import controller.disciplinas.disciplinaController;
 
 public class CRUDdisciplinas extends JFrame {
 
@@ -21,10 +20,11 @@ public class CRUDdisciplinas extends JFrame {
 	private JPanel contentPane;
 	private JTextField tfNome;
 	private JTextField tfDiaSemana;
-	private JTextField txtHorario;
 	private JTextField tfCodDisciplina;
 	private JTextField tfQuantidadeHoras;
 	private JTextField tfCodCurso;
+	private JTextField tfHoraInicial;
+	private JButton btnInscritos;
 
 	public CRUDdisciplinas() {
 		setTitle("Disciplinas");
@@ -36,13 +36,6 @@ public class CRUDdisciplinas extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		new Font("Segoe UI", Font.PLAIN, 14);
-		
-		try {
-		    MaskFormatter mask = new MaskFormatter(" ###.###.###-##");
-		    mask.setPlaceholderCharacter('_');
-		} catch (Exception e) {
-		    e.printStackTrace();
-		}
 		
 		tfNome = new JTextField();
 		tfNome.setFont(new Font("Segoe UI", Font.PLAIN, 11));
@@ -58,19 +51,9 @@ public class CRUDdisciplinas extends JFrame {
 		tfDiaSemana.setColumns(10);
 		
 		
-		try {
-            MaskFormatter mascaraHora = new MaskFormatter("##:##");
-            mascaraHora.setPlaceholderCharacter('_');
-            txtHorario = new JFormattedTextField(mascaraHora);
-            txtHorario.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-            txtHorario.setBounds(27, 185, 157, 32);
-            contentPane.add(txtHorario);
-            
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
 		
 		tfCodDisciplina = new JTextField();
+		tfCodDisciplina.setFont(new Font("Segoe UI", Font.PLAIN, 11));
 		tfCodDisciplina.setBounds(27, 23, 157, 32);
 		contentPane.add(tfCodDisciplina);
 		tfCodDisciplina.setColumns(10);
@@ -87,10 +70,20 @@ public class CRUDdisciplinas extends JFrame {
 		contentPane.add(tfCodCurso);
 		tfCodCurso.setColumns(10);
 		
-		JButton btnConsultar = new JButton("Consultar");
+		tfHoraInicial = new JTextField();
+		tfHoraInicial.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+		tfHoraInicial.setBounds(27, 185, 157, 32);
+		contentPane.add(tfHoraInicial);
+		tfHoraInicial.setColumns(10);
+		
+		JButton btnConsultar = new JButton("Buscar disciplina");
 		btnConsultar.setFont(new Font("Segoe UI", Font.PLAIN, 11));
 		btnConsultar.setBounds(215, 23, 157, 32);
 		contentPane.add(btnConsultar);
+		
+		SwingUtilities.invokeLater(() -> {
+		    btnConsultar.requestFocusInWindow();
+		});
 		
 		JButton btnCadastrar = new JButton("Cadastrar");
 		btnCadastrar.setFont(new Font("Segoe UI", Font.PLAIN, 11));
@@ -102,12 +95,25 @@ public class CRUDdisciplinas extends JFrame {
 		btnLimpar.setBounds(215, 237, 157, 32);
 		contentPane.add(btnLimpar);
 		
+		JButton btnInscritos = new JButton("Consultar inscritos");
+		btnInscritos.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+		btnInscritos.setBounds(215, 76, 157, 32);
+		contentPane.add(btnInscritos);
+		
 		addPlaceholder(tfNome, " Nome");
 		addPlaceholder(tfDiaSemana, " Dia da semana");
 		addPlaceholder(tfQuantidadeHoras, " Quantidade de horas");
 		addPlaceholder(tfCodCurso, " Código do curso");
 		addPlaceholder(tfCodDisciplina, " Código da discipina");
-
+		addPlaceholder(tfHoraInicial, " Horário inicial");
+		
+		disciplinaController discCtrl = new disciplinaController(tfCodDisciplina, tfNome, tfCodCurso, tfHoraInicial, tfDiaSemana, tfQuantidadeHoras);
+		
+		discCtrl.setTela(this);
+		btnCadastrar.addActionListener(discCtrl);
+		btnConsultar.addActionListener(discCtrl);
+		btnLimpar.addActionListener( e -> limparCampos());
+		btnInscritos.addActionListener(discCtrl);
 	}
 	
 	public void limparCampos() {
@@ -122,6 +128,7 @@ public class CRUDdisciplinas extends JFrame {
 		addPlaceholder(tfQuantidadeHoras, " Quantidade de horas");
 		addPlaceholder(tfCodCurso, " Código do curso");
 		addPlaceholder(tfCodDisciplina, " Código da discipina");
+		addPlaceholder(tfHoraInicial, " Horário inicial");
 	}
 	
 	private static void addPlaceholder(JTextField field, String placeholder) {

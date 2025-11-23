@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import controller.curso.CursoController;
@@ -75,6 +76,10 @@ public class CRUDcursos extends JFrame {
 		btnCadastrar.addActionListener(cursoCtrl);
 		btnLimpar.addActionListener(e -> limparCampos());
 		btnConsultar.addActionListener(cursoCtrl);
+		
+		SwingUtilities.invokeLater(() -> {
+		    btnConsultar.requestFocusInWindow();
+		});
 	}
 	
 	public void limparCampos() {

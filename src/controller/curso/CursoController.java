@@ -1,6 +1,5 @@
 package controller.curso;
 
-import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -14,9 +13,9 @@ import java.io.PrintWriter;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import fila.Fila;
 import lista.Lista;
 import model.cursos.Curso;
-import model.professor.Professor;
 import view.cursos.CRUDcursos;
 import view.cursos.Consulta;
 
@@ -30,6 +29,7 @@ public class CursoController implements ActionListener{
 	CRUDcursos tela;
 	
 	final String path = "C:\\temp";
+	final String fileName = "cursos.csv";
 	
 	public CursoController(JTextField tfCodCurso, JTextField tfNomeCurso, JTextField tfArea) {
 		
@@ -56,7 +56,13 @@ public class CursoController implements ActionListener{
 			editar();
 		}
 		if(cmd.equals("Consultar")) {
-			consultar();
+			File file = new File(path, "cursos.csv");
+			
+			if(file.exists()) {
+				consultar();
+			}else {
+				JOptionPane.showMessageDialog(null, "Nenhum curso cadastrado!");
+			}
 		}
 		
 	}
@@ -64,19 +70,18 @@ public class CursoController implements ActionListener{
 	private void consultar() {
 		String codCurso = tfCodCurso.getText().trim();
 		
-		Curso encontrado = buscarCurso(codCurso);
-		if(encontrado == null) {
-			JOptionPane.showMessageDialog(null, "Nenhum curso cadastrado!", "Aviso", JOptionPane.WARNING_MESSAGE);
-			return;
-		}
-		
 		try {
+			Curso encontrado = buscarCurso(codCurso);
+			
 			if(encontrado != null) {
 				Consulta tela = new Consulta(encontrado);
 				tela.setVisible(true);
+			}else {
+				JOptionPane.showMessageDialog(null, "Código de curso não cadastrado");
 			}
+			
 		}catch(Exception e) {
-			JOptionPane.showMessageDialog(null, e, "Aviso", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, e);
 			e.printStackTrace();
 		}
 	}
@@ -137,6 +142,8 @@ public class CursoController implements ActionListener{
 	}
 
 	private void cadastro() {
+		File file = new File(path, "cursos.csv");
+		
 		String codCurso = tfCodCurso.getText().trim();
 		String Nome = tfNomeCurso.getText().trim();
 		String AreaConhecimento = tfArea.getText().trim();
@@ -150,19 +157,21 @@ public class CursoController implements ActionListener{
 		String arqName = "cursos.csv";
 		String conteudo = codCurso + ";" + Nome + ";" + AreaConhecimento + "\n";
 		
-		try {
-			Lista<Curso> lista = readFile(arqName);
-			int tamanho = lista.size();
-			for(int i = 0; i < tamanho; i++) {
-				Curso c = lista.get(i);
-				
-				if(c.getCodCurso().equals(codCurso)) {
-					JOptionPane.showMessageDialog(null, "Curso já cadastrado!", "Aviso", JOptionPane.WARNING_MESSAGE);
-					return;
+		if(file.exists()) {
+			try {
+				Lista<Curso> lista = readFile(arqName);
+				int tamanho = lista.size();
+				for(int i = 0; i < tamanho; i++) {
+					Curso c = lista.get(i);
+					
+					if(c.getCodCurso().equals(codCurso)) {
+						JOptionPane.showMessageDialog(null, "Curso já cadastrado!", "Aviso", JOptionPane.WARNING_MESSAGE);
+						return;
+					}
 				}
-			}
-		}catch(Exception e) {
-			e.printStackTrace();
+			}catch(Exception e) {
+				e.printStackTrace();
+			}	
 		}
 		
 		try {
@@ -191,15 +200,28 @@ public class CursoController implements ActionListener{
 		fw.close();
 	}
 	
-	private Curso buscarCurso(String codCurso) {
-		String fileName = "cursos.csv";
-		File file = new File(path, fileName);
-				
+	private Fila<Curso> popularFila(Fila<Curso> fila, Lista<Curso> lista ){
+		int tamanho = lista.size();
+		
+		for(int i = 0; i < tamanho; i++) {
+			try {
+				Curso c = lista.get(i);
+				fila.Insert(c);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return fila;
+	}
+	
+	public Curso buscarCurso(String codCurso) {
+		Fila<Curso> fila = new Fila<>();
 		try {
 			Lista<Curso> lista = readFile(fileName);
-			int tamanho = lista.size();
+			Fila<Curso> fila_ = popularFila(fila, lista);
+			int tamanho = fila_.size();
 			for(int i = 0; i < tamanho; i++) {
-				Curso c = lista.get(i);
+				Curso c = fila_.remove();
 				if(c.getCodCurso().equals(codCurso)) {
 					return c;
 				}
@@ -232,8 +254,6 @@ public class CursoController implements ActionListener{
 		}
 		
 	}
-
-	// Resolver o erro de quando não tem nenhum professor cadastrado
 	
 	public Lista<Curso> readFile(String nome) throws IOException {
 	    File file = new File(path, nome);

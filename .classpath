@@ -6,6 +6,8 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="lib/ListStack.jar"/>
+	<classpathentry kind="lib" path="lib/Fila.jar"/>
+	<classpathentry kind="lib" path="lib/List.jar"/>
+	<classpathentry kind="lib" path="lib/TabelaEspalhamento.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

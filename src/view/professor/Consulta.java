@@ -1,5 +1,6 @@
 package view.professor;
 
+import java.awt.Color;
 import java.awt.Font;
 
 import javax.swing.JButton;
@@ -36,6 +37,8 @@ public class Consulta extends JFrame {
 		tfCPF.setBounds(24, 22, 135, 27);
 		contentPane.add(tfCPF);
 		tfCPF.setColumns(10);
+		tfCPF.setEditable(false);
+		tfCPF.setBackground(Color.WHITE);
 		
 		tfNome = new JTextField(p.getNome());
 		tfNome.setFont(new Font("Segoe UI", Font.PLAIN, 11));
