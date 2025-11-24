@@ -11,11 +11,11 @@ import javax.swing.table.DefaultTableModel;
 import lista.Lista;
 import model.inscrito.InscritoDTO;
 
-public class Inscritos extends JFrame {
+public class disciplinaInscritos extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
-    	public Inscritos(Lista<InscritoDTO> lista) {
+    	public disciplinaInscritos(Lista<InscritoDTO> lista) {
 
         setTitle("Inscritos da Disciplina");
         setSize(597, 466);
@@ -25,7 +25,13 @@ public class Inscritos extends JFrame {
 
         String[] colunas = { "CPF", "Nome", "Área", "Pontos", "Processo" };
 
-        DefaultTableModel model = new DefaultTableModel(colunas, 0);
+        DefaultTableModel model = new DefaultTableModel(colunas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        
         int tamanho = lista.size();
         for (int i = 0; i < tamanho; i++) {
             try {

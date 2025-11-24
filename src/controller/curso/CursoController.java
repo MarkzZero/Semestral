@@ -14,10 +14,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import controller.disciplinas.disciplinaController;
+import controller.inscricoes.inscricoesController;
 import fila.Fila;
 import lista.Lista;
 import model.cursos.Curso;
 import model.disciplina.Disciplina;
+import model.inscrito.Inscrito;
 import view.cursos.CRUDcursos;
 import view.cursos.Consulta;
 import view.disciplinas.DisciplinasCurso;
@@ -156,27 +158,35 @@ public class CursoController implements ActionListener{
 	}
 
 	private void deletar() {
-		disciplinaController discCtrl = new disciplinaController(null, null, null, null, null, null);;
+		disciplinaController discCtrl = new disciplinaController(null, null, null, null, null, null);
+		inscricoesController inscCtrl = new inscricoesController(null, null);
 		String codCurso = tfCodCurso.getText().trim();
 		
 		try {
 			Lista<Curso> lista = readFile(fileName);
 			Lista<Disciplina> listaDisc = discCtrl.readFile("disciplinas.csv");
+			Lista<Inscrito> listaInsc = inscCtrl.readFile("Inscricoes.csv");
 			int tamanho = lista.size();
-			for(int i = 0; i < tamanho; i++) {
-				if(lista.get(i).getCodCurso().equals(codCurso)) {
-					lista.remove(i);
-					break;
-				}
+			for (int i = lista.size() - 1; i >= 0; i--) {
+			    if (lista.get(i).getCodCurso().equals(codCurso)) {
+			        lista.remove(i);
+			    }
 			}
 			
 			tamanho = listaDisc.size();
-			for(int i = 0; i < tamanho; i++) {
+			for(int i = tamanho - 1; i >= 0 ; i--) {
 				if(listaDisc.get(i).getCodCurso().equals(codCurso)) {
+			        Disciplina d = listaDisc.get(i);
 					listaDisc.remove(i);
+			        
+					if(listaInsc.get(i).getCodDisciplina().equals(d.getCodDisc())) {
+						listaInsc.remove(i);
+					}
+			        i--; 
 				}
 			}
 			
+			inscCtrl.salvarLista(listaInsc);
 			discCtrl.salvarLista(listaDisc);
 			salvarLista(fileName, lista);
 			JOptionPane.showMessageDialog(null, "Curso removido com sucesso!");

@@ -29,128 +29,121 @@ public class CRUDdisciplinas extends JFrame {
 	public CRUDdisciplinas() {
 		setTitle("Disciplinas");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 429, 331);
+		setBounds(100, 100, 429, 445);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setLocationRelativeTo(null); 
+		setLocationRelativeTo(null);
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		new Font("Segoe UI", Font.PLAIN, 14);
-		
-		tfNome = new JTextField();
-		tfNome.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		tfNome.setBounds(27, 76, 157, 32);
-		contentPane.add(tfNome);
-		tfNome.setColumns(10);
 
-		
-		tfDiaSemana = new JTextField();
-		tfDiaSemana.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		tfDiaSemana.setBounds(27, 131, 157, 32);
-		contentPane.add(tfDiaSemana);
-		tfDiaSemana.setColumns(10);
-		
-		
-		
 		tfCodDisciplina = new JTextField();
 		tfCodDisciplina.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		tfCodDisciplina.setBounds(27, 23, 157, 32);
+		tfCodDisciplina.setBounds(27, 42, 157, 32);
 		contentPane.add(tfCodDisciplina);
-		tfCodDisciplina.setColumns(10);
-		
-		tfQuantidadeHoras = new JTextField();
-		tfQuantidadeHoras.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		tfQuantidadeHoras.setBounds(215, 185, 157, 32);
-		contentPane.add(tfQuantidadeHoras);
-		tfQuantidadeHoras.setColumns(10);
-		
-		tfCodCurso = new JTextField();
-		tfCodCurso.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		tfCodCurso.setBounds(215, 131, 157, 32);
-		contentPane.add(tfCodCurso);
-		tfCodCurso.setColumns(10);
-		
-		tfHoraInicial = new JTextField();
-		tfHoraInicial.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		tfHoraInicial.setBounds(27, 185, 157, 32);
-		contentPane.add(tfHoraInicial);
-		tfHoraInicial.setColumns(10);
-		
+
 		JButton btnConsultar = new JButton("Buscar disciplina");
 		btnConsultar.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		btnConsultar.setBounds(215, 23, 157, 32);
+		btnConsultar.setBounds(215, 42, 157, 32);
 		contentPane.add(btnConsultar);
-		
-		SwingUtilities.invokeLater(() -> {
-		    btnConsultar.requestFocusInWindow();
-		});
-		
+
+		tfNome = new JTextField();
+		tfNome.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+		tfNome.setBounds(27, 101, 345, 32);
+		contentPane.add(tfNome);
+
+		tfDiaSemana = new JTextField();
+		tfDiaSemana.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+		tfDiaSemana.setBounds(27, 160, 157, 32);
+		contentPane.add(tfDiaSemana);
+
+		tfCodCurso = new JTextField();
+		tfCodCurso.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+		tfCodCurso.setBounds(215, 160, 157, 32);
+		contentPane.add(tfCodCurso);
+
+		tfHoraInicial = new JTextField();
+		tfHoraInicial.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+		tfHoraInicial.setBounds(27, 222, 157, 32);
+		contentPane.add(tfHoraInicial);
+
+		tfQuantidadeHoras = new JTextField();
+		tfQuantidadeHoras.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+		tfQuantidadeHoras.setBounds(215, 222, 157, 32);
+		contentPane.add(tfQuantidadeHoras);
+
+		btnInscritos = new JButton("Consultar inscritos");
+		btnInscritos.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+		btnInscritos.setBounds(27, 291, 157, 32);
+		contentPane.add(btnInscritos);
+
 		JButton btnCadastrar = new JButton("Cadastrar");
 		btnCadastrar.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		btnCadastrar.setBounds(27, 237, 157, 32);
+		btnCadastrar.setBounds(27, 344, 157, 32);
 		contentPane.add(btnCadastrar);
-		
+
 		JButton btnFechar = new JButton("Fechar");
 		btnFechar.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		btnFechar.setBounds(215, 237, 157, 32);
+		btnFechar.setBounds(215, 344, 157, 32);
 		contentPane.add(btnFechar);
-		
-		JButton btnInscritos = new JButton("Consultar inscritos");
-		btnInscritos.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		btnInscritos.setBounds(215, 76, 157, 32);
-		contentPane.add(btnInscritos);
-		
+
+		addPlaceholder(tfCodDisciplina, " Código da disciplina");
 		addPlaceholder(tfNome, " Nome");
 		addPlaceholder(tfDiaSemana, " Dia da semana");
-		addPlaceholder(tfQuantidadeHoras, " Quantidade de horas");
 		addPlaceholder(tfCodCurso, " Código do curso");
-		addPlaceholder(tfCodDisciplina, " Código da discipina");
-		addPlaceholder(tfHoraInicial, " Horário inicial");
-		
-		disciplinaController discCtrl = new disciplinaController(tfCodDisciplina, tfNome, tfCodCurso, tfHoraInicial, tfDiaSemana, tfQuantidadeHoras);
-		
+		addPlaceholder(tfHoraInicial, " Hora inicial");
+		addPlaceholder(tfQuantidadeHoras, " Carga horária");
+
+		disciplinaController discCtrl = new disciplinaController(
+				tfCodDisciplina, tfNome, tfCodCurso, tfHoraInicial, tfDiaSemana, tfQuantidadeHoras
+		);
+
 		discCtrl.setTela(this);
+
 		btnCadastrar.addActionListener(discCtrl);
 		btnConsultar.addActionListener(discCtrl);
-		btnFechar.addActionListener( e -> dispose());
 		btnInscritos.addActionListener(discCtrl);
+		btnFechar.addActionListener(e -> dispose());
+
+		SwingUtilities.invokeLater(() -> btnConsultar.requestFocusInWindow());
 	}
-	
+
 	public void limparCampos() {
-		tfNome.setText("");
-		tfDiaSemana.setCaretPosition(0);
-		tfQuantidadeHoras.setText("");
-		tfCodCurso.setText("");
 		tfCodDisciplina.setText("");
-		
+		tfNome.setText("");
+		tfDiaSemana.setText("");
+		tfCodCurso.setText("");
+		tfHoraInicial.setText("");
+		tfQuantidadeHoras.setText("");
+
+		addPlaceholder(tfCodDisciplina, " Código da disciplina");
 		addPlaceholder(tfNome, " Nome");
 		addPlaceholder(tfDiaSemana, " Dia da semana");
-		addPlaceholder(tfQuantidadeHoras, " Quantidade de horas");
 		addPlaceholder(tfCodCurso, " Código do curso");
-		addPlaceholder(tfCodDisciplina, " Código da discipina");
-		addPlaceholder(tfHoraInicial, " Horário inicial");
+		addPlaceholder(tfHoraInicial, " Hora inicial");
+		addPlaceholder(tfQuantidadeHoras, " Carga horária");
 	}
-	
+
 	private static void addPlaceholder(JTextField field, String placeholder) {
-	    field.setForeground(Color.GRAY);
-	    field.setText(placeholder);
+		field.setForeground(Color.GRAY);
+		field.setText(placeholder);
 
-	    field.addFocusListener(new FocusAdapter() {
-	        @Override
-	        public void focusGained(FocusEvent e) {
-	            if (field.getText().equals(placeholder)) {
-	                field.setText("");
-	                field.setForeground(Color.BLACK);
-	            }
-	        }
+		field.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (field.getText().equals(placeholder)) {
+					field.setText("");
+					field.setForeground(Color.BLACK);
+				}
+			}
 
-	        @Override
-	        public void focusLost(FocusEvent e) {
-	            if (field.getText().isEmpty()) {
-	                field.setForeground(Color.GRAY);
-	                field.setText(placeholder);
-	            }
-	        }
-	    });
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (field.getText().isEmpty()) {
+					field.setForeground(Color.GRAY);
+					field.setText(placeholder);
+				}
+			}
+		});
 	}
 }

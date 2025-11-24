@@ -25,7 +25,13 @@ public class DisciplinasCurso extends JFrame {
         
         String[] colunas = { "Curso", "Código da disciplina", "Nome da disciplina", "Dia da semana", "Hora de início", "Quantidade de horas"};
 
-        DefaultTableModel model = new DefaultTableModel(colunas, 0);
+        DefaultTableModel model = new DefaultTableModel(colunas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };        
+        
         int tamanho = lista.size();
         for (int i = 0; i < tamanho; i++) {
             try {

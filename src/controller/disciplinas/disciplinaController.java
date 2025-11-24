@@ -25,7 +25,7 @@ import model.inscrito.InscritoDTO;
 import model.professor.Professor;
 import view.disciplinas.CRUDdisciplinas;
 import view.disciplinas.Consultar;
-import view.inscritos.Inscritos;
+import view.inscritos.disciplinaInscritos;
 
 public class disciplinaController implements ActionListener {
 	
@@ -92,7 +92,7 @@ public class disciplinaController implements ActionListener {
 	    
 		Lista<InscritoDTO> listaDTO = listarInscritos(codDisciplina);
 		if(!listaDTO.isEmpty()) {
-			Inscritos telaInscritos = new Inscritos(listaDTO);
+			disciplinaInscritos telaInscritos = new disciplinaInscritos(listaDTO);
 			telaInscritos.setVisible(true);
 		}else {
 			JOptionPane.showMessageDialog(null, "Nenhum inscrito cadastrado para esta disciplina", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -284,7 +284,12 @@ public class disciplinaController implements ActionListener {
 					Disciplina d = lista.get(i);
 					
 					if(d.getCodDisc().equals(codDisc)) {
-						JOptionPane.showMessageDialog(null, "Disciplina já cadastrada!", "Aviso", JOptionPane.WARNING_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Código de disciplina já cadastrada!", "Aviso", JOptionPane.WARNING_MESSAGE);
+						return;
+					}
+					
+					if(d.getNomeDisc().equals(nomeDisc)){
+						JOptionPane.showMessageDialog(null, "Nome de disciplina já cadastrada!", "Aviso", JOptionPane.WARNING_MESSAGE);
 						return;
 					}
 				}
