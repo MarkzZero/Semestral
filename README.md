@@ -1,11 +1,10 @@
-```markdown
-# 📚 Sistema de Gerenciamento Acadêmico
+# Sistema de Gerenciamento Acadêmico
 
 Projeto acadêmico desenvolvido em **Java** utilizando o padrão **MVC**, interface gráfica em **Swing**, estrutura de dados própria (`Lista<T>`) e persistência em **arquivos CSV**.
 
 ---
 
-## 🏗️ Arquitetura do Sistema (MVC)
+## Arquitetura do Sistema (MVC)
 
 ### **Model**  
 Contém as classes que representam as entidades principais:  
@@ -38,7 +37,7 @@ Cada entidade possui seu próprio controller especializado.
 
 ---
 
-## 🔎 Consultas por Código  
+## Consultas por Código  
 As buscas realizadas no sistema utilizam identificadores específicos:  
 - **Professor:** consulta pelo **CPF**  
 - **Inscrições:** consulta pelo **CPF** e **código da disciplina**  
@@ -47,7 +46,7 @@ As buscas realizadas no sistema utilizam identificadores específicos:
 
 ---
 
-## 📁 Diretório de Arquivos CSV
+## Diretório de Arquivos CSV
 
 O sistema utiliza arquivos CSV para armazenar dados:
 
@@ -56,7 +55,7 @@ O sistema utiliza arquivos CSV para armazenar dados:
 - `professores.csv`  
 - `inscritos.csv`
 
-### 📌 Observação importante  
+### Observação importante  
 É **recomendável** que o usuário crie a pasta:
 
 ```
@@ -69,7 +68,7 @@ No entanto, **o diretório pode ser alterado manualmente** modificando os caminh
 
 ---
 
-## 📑 Funcionalidades
+## Funcionalidades
 
 ### ✔️ Cursos  
 - Cadastrar  
@@ -99,7 +98,7 @@ No entanto, **o diretório pode ser alterado manualmente** modificando os caminh
 
 ---
 
-## 📦 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 /Semestral
@@ -125,7 +124,7 @@ No entanto, **o diretório pode ser alterado manualmente** modificando os caminh
 
 ---
 
-## ▶️ Como Executar
+## Como Executar
 
 1. Crie a pasta recomendada `C:\temp` **ou** ajuste os diretórios nos controllers.  
 2. Coloque os arquivos CSV dentro dessa pasta.  
@@ -135,7 +134,7 @@ No entanto, **o diretório pode ser alterado manualmente** modificando os caminh
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - Java 17+  
 - Swing  
