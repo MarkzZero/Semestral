@@ -14,8 +14,12 @@ import java.io.PrintWriter;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import controller.disciplinas.disciplinaController;
+import controller.professor.ProfessorController;
 import lista.Lista;
+import model.disciplina.Disciplina;
 import model.inscrito.Inscrito;
+import model.professor.Professor;
 import view.inscritos.CRUDinscritos;
 import view.inscritos.Consulta;
 
@@ -25,6 +29,7 @@ public class inscricoesController implements ActionListener {
 	private JTextField tfCodDisc;
 
 	final String path = "C:\\temp";
+	final String fileName = "inscricoes.csv";
 
 	CRUDinscritos tela;
 	
@@ -66,7 +71,7 @@ public class inscricoesController implements ActionListener {
 				Consulta tela = new Consulta(encontrado);
 				tela.setVisible(true);
 			}else {
-				JOptionPane.showMessageDialog(null, "Inscrito não cadastrado");
+				JOptionPane.showMessageDialog(null, "Inscrito não cadastrado", "Aviso", JOptionPane.WARNING_MESSAGE);
 			}
 		}catch(Exception e) {
 			JOptionPane.showMessageDialog(null, e, null, JOptionPane.WARNING_MESSAGE);
@@ -74,10 +79,22 @@ public class inscricoesController implements ActionListener {
 	}
 
 	private void editar() {
-		String fileName = "inscricoes.csv";
-		
 		String cpf = tfCPF.getText().trim();
 		String codDisciplina = tfCodDisc.getText().trim();
+		
+		try {
+			if(!validarCPF(cpf)) {
+				JOptionPane.showMessageDialog(null, "CPF inválido!", "Aviso", JOptionPane.WARNING_MESSAGE);
+				return;
+			}
+			if(!validarDisciplina(codDisciplina)) {
+				JOptionPane.showMessageDialog(null, "Disciplina inválida!", "Aviso", JOptionPane.WARNING_MESSAGE);
+				return;
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	    if (cpf.isEmpty() || codDisciplina.isEmpty()) {
 	        JOptionPane.showMessageDialog(null, "Preencha todos os campos!");
@@ -105,7 +122,6 @@ public class inscricoesController implements ActionListener {
 	}
 
 	private void deletar() {
-		String fileName = "inscricoes.csv";
 		String cpf = tfCPF.getText().trim();
 		String codDisciplina = tfCodDisc.getText().trim();
 		
@@ -129,23 +145,40 @@ public class inscricoesController implements ActionListener {
 	}
 
 	private void cadastro() {
-		File file = new File(path, "inscricoes.csv");
+		File file = new File(path, fileName);
 		
 		String cpf = tfCPF.getText().trim();
 		String codDisciplina = tfCodDisc.getText().trim();
 		String codProcesso = gerarCodigoProcesso();
+		
+		try {
+			if(!validarCPF(cpf)) {
+				JOptionPane.showMessageDialog(null, "CPF inválido!", "Aviso", JOptionPane.WARNING_MESSAGE);
+				return;
+			}	
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			if(!validarDisciplina(codDisciplina)) {
+				JOptionPane.showMessageDialog(null, "Disciplina inválida!", "Aviso", JOptionPane.WARNING_MESSAGE);
+				return;
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 		
 		if(cpf.equals("___.___.___-__") || codDisciplina.equals("Código da disciplina")) {
 			JOptionPane.showMessageDialog(null, "Preencha todos os campos!", "Aviso", JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 
-		String arqName = "inscricoes.csv";
 		String conteudo = cpf + ";" + codDisciplina + ";" + codProcesso + "\n";
 		
 		if(file.exists()) {
 			try {
-				Lista<Inscrito> lista = readFile(arqName);
+				Lista<Inscrito> lista = readFile(fileName);
 				int tamanho = lista.size();
 				for(int i = 0; i < tamanho; i++) {
 					Inscrito inscrito = lista.get(i);
@@ -161,7 +194,7 @@ public class inscricoesController implements ActionListener {
 		}
 
 		try {
-			createFile(arqName, conteudo);
+			createFile(fileName, conteudo);
 			JOptionPane.showMessageDialog(null, "Inscrito cadastrado com sucesso!");
 			tela.limparCampos();
 		} catch (IOException e) {
@@ -170,8 +203,50 @@ public class inscricoesController implements ActionListener {
 		}
 	}
 	
+	private boolean validarDisciplina(String codDisciplina) {
+		disciplinaController discCtrl = new disciplinaController(null, null, null, null, null, null);
+		
+		try {
+			Lista<Disciplina> lista = discCtrl.readFile("Disciplinas.csv");
+			int tamanho = lista.size();
+			
+			for(int i = 0; i < tamanho; i++) {
+				Disciplina d = lista.get(i);
+				if(d.getCodDisc().equals(codDisciplina)) {
+					return true;
+				}
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	private boolean validarCPF(String cpf) throws Exception {
+		ProfessorController profCtrl = new ProfessorController(null, null, null, null);
+		try {
+			Lista<Professor> lista = profCtrl.readFile("professor.csv");
+			int tamanho = lista.size();
+			
+			for(int i = 0; i< tamanho; i++) {
+				Professor p = lista.get(i);
+				
+				if(p.getCpf().equals(cpf)) {
+					return true;
+				}
+			}
+			
+			return false;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return false;
+	}
+
 	public void salvarLista(Lista<Inscrito> lista) throws Exception{
-		File file = new File(path, "inscricoes.csv");
+		File file = new File(path, fileName);
 		FileWriter fw = new FileWriter(file, false);
 		PrintWriter pw = new PrintWriter(fw);
 		int tamanho = lista.size();
@@ -186,9 +261,7 @@ public class inscricoesController implements ActionListener {
 		fw.close();
 	}
 	
-	private Inscrito buscarInscrito(String cpf, String codDisplina) {
-		String fileName = "inscricoes.csv";
-				
+	private Inscrito buscarInscrito(String cpf, String codDisplina) {				
 		try {
 			Lista<Inscrito> lista = readFile(fileName);
 			int tamanho = lista.size();
@@ -210,7 +283,7 @@ public class inscricoesController implements ActionListener {
 		String prefixo = "P" + ano + "-";
 		int maior = 0;
 
-		File file = new File(path, "inscricoes.csv");
+		File file = new File(path, fileName);
 
 		if (file.exists()) {
 			try (BufferedReader br = new BufferedReader(new FileReader(file))) {

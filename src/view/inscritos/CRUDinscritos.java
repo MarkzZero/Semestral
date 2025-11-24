@@ -40,7 +40,6 @@ public class CRUDinscritos extends JFrame {
         tfCodDisciplina.setColumns(10);
 
         try {
-            // 🔥 REMOVIDO O ESPAÇO DA MÁSCARA! ESSA ERA A CAUSA DO ERRO!
             MaskFormatter mask = new MaskFormatter("###.###.###-##");
             mask.setPlaceholderCharacter('_');
             tfCPF = new JFormattedTextField(mask);
@@ -61,10 +60,10 @@ public class CRUDinscritos extends JFrame {
         btnCadastrar.setBounds(27, 130, 157, 32);
         contentPane.add(btnCadastrar);
 
-        JButton btnLimpar = new JButton("Limpar");
-        btnLimpar.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-        btnLimpar.setBounds(215, 130, 157, 32);
-        contentPane.add(btnLimpar);
+        JButton btnFechar = new JButton("Fechar");
+        btnFechar.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        btnFechar.setBounds(215, 130, 157, 32);
+        contentPane.add(btnFechar);
 
         addPlaceholder(tfCodDisciplina, " Código da disciplina");
 
@@ -77,12 +76,12 @@ public class CRUDinscritos extends JFrame {
 
         btnCadastrar.addActionListener(inscCtrl);
         btnConsultar.addActionListener(inscCtrl);
-        btnLimpar.addActionListener(e -> limparCampos());
+        btnFechar.addActionListener(e -> dispose());
     }
 
     public void limparCampos() {
         tfCodDisciplina.setText("");
-        tfCPF.setValue(null);  // 🔥 Forma correta para limpar máscaras
+        tfCPF.setValue(null); 
 
         addPlaceholder(tfCodDisciplina, " Código da disciplina");
     }

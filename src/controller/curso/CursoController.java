@@ -13,11 +13,14 @@ import java.io.PrintWriter;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import controller.disciplinas.disciplinaController;
 import fila.Fila;
 import lista.Lista;
 import model.cursos.Curso;
+import model.disciplina.Disciplina;
 import view.cursos.CRUDcursos;
 import view.cursos.Consulta;
+import view.disciplinas.DisciplinasCurso;
 
 
 public class CursoController implements ActionListener{
@@ -56,7 +59,7 @@ public class CursoController implements ActionListener{
 			editar();
 		}
 		if(cmd.equals("Consultar")) {
-			File file = new File(path, "cursos.csv");
+			File file = new File(path, fileName);
 			
 			if(file.exists()) {
 				consultar();
@@ -64,7 +67,42 @@ public class CursoController implements ActionListener{
 				JOptionPane.showMessageDialog(null, "Nenhum curso cadastrado!");
 			}
 		}
+		if(cmd.equals("Consultar disciplinas")) {
+			consultarDisciplinas();
+		}
+	}
+
+	private void consultarDisciplinas() {
+		disciplinaController discCtrl = new disciplinaController(null, null, null, null, null, null);
+		String codCurso = tfCodCurso.getText().trim();
+		File file = new File(path, "disciplinas.csv");
 		
+		if(!file.exists()) {
+			JOptionPane.showMessageDialog(null, "Nenhuma disciplina cadastrada para esse curso!", "Aviso", JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+		try {
+			Lista<Disciplina> list = discCtrl.readFile("disciplinas.csv");
+			Lista<Disciplina> listDisc = new Lista<>();
+			int tamanho = list.size();
+			
+			for(int i = 0; i < tamanho; i++) {
+				if(list.get(i).getCodCurso().equals(codCurso)) {
+					listDisc.addLast(list.get(i));
+				}
+			}
+			
+			Curso curso = buscarCurso(codCurso);
+			
+			if(!listDisc.isEmpty()) {
+				DisciplinasCurso tela = new DisciplinasCurso(listDisc, codCurso, curso);
+				tela.setVisible(true);
+			}else {
+				JOptionPane.showMessageDialog(null, "Nenhuma disciplina cadastrada neste curso!", "Aviso", JOptionPane.WARNING_MESSAGE);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void consultar() {
@@ -77,7 +115,7 @@ public class CursoController implements ActionListener{
 				Consulta tela = new Consulta(encontrado);
 				tela.setVisible(true);
 			}else {
-				JOptionPane.showMessageDialog(null, "Código de curso não cadastrado");
+				JOptionPane.showMessageDialog(null, "Código de curso não cadastrado", "Aviso", JOptionPane.WARNING_MESSAGE);
 			}
 			
 		}catch(Exception e) {
@@ -86,9 +124,7 @@ public class CursoController implements ActionListener{
 		}
 	}
 
-	private void editar() {
-		String fileName = "cursos.csv";
-		
+	private void editar() {		
 		String codCurso = tfCodCurso.getText().trim();
 		String nome = tfNomeCurso.getText().trim();
 		String area = tfArea.getText().trim();
@@ -120,11 +156,12 @@ public class CursoController implements ActionListener{
 	}
 
 	private void deletar() {
-		String fileName = "cursos.csv";
+		disciplinaController discCtrl = new disciplinaController(null, null, null, null, null, null);;
 		String codCurso = tfCodCurso.getText().trim();
 		
 		try {
 			Lista<Curso> lista = readFile(fileName);
+			Lista<Disciplina> listaDisc = discCtrl.readFile("disciplinas.csv");
 			int tamanho = lista.size();
 			for(int i = 0; i < tamanho; i++) {
 				if(lista.get(i).getCodCurso().equals(codCurso)) {
@@ -133,6 +170,14 @@ public class CursoController implements ActionListener{
 				}
 			}
 			
+			tamanho = listaDisc.size();
+			for(int i = 0; i < tamanho; i++) {
+				if(listaDisc.get(i).getCodCurso().equals(codCurso)) {
+					listaDisc.remove(i);
+				}
+			}
+			
+			discCtrl.salvarLista(listaDisc);
 			salvarLista(fileName, lista);
 			JOptionPane.showMessageDialog(null, "Curso removido com sucesso!");
 		}catch(Exception e) {
@@ -142,7 +187,7 @@ public class CursoController implements ActionListener{
 	}
 
 	private void cadastro() {
-		File file = new File(path, "cursos.csv");
+		File file = new File(path, fileName);
 		
 		String codCurso = tfCodCurso.getText().trim();
 		String Nome = tfNomeCurso.getText().trim();
@@ -154,12 +199,11 @@ public class CursoController implements ActionListener{
 		}
 
 		
-		String arqName = "cursos.csv";
 		String conteudo = codCurso + ";" + Nome + ";" + AreaConhecimento + "\n";
 		
 		if(file.exists()) {
 			try {
-				Lista<Curso> lista = readFile(arqName);
+				Lista<Curso> lista = readFile(fileName);
 				int tamanho = lista.size();
 				for(int i = 0; i < tamanho; i++) {
 					Curso c = lista.get(i);
@@ -175,7 +219,7 @@ public class CursoController implements ActionListener{
 		}
 		
 		try {
-			createFile(arqName, conteudo);
+			createFile(fileName, conteudo);
 			JOptionPane.showMessageDialog(null, "Curso cadastrado com sucesso!", null, JOptionPane.INFORMATION_MESSAGE);
 			tela.limparCampos();
 		}catch(Exception e) {

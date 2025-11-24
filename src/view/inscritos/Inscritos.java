@@ -1,4 +1,4 @@
-package view.disciplinas;
+package view.inscritos;
 
 import java.awt.BorderLayout;
 import java.awt.Font;

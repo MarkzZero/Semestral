@@ -75,10 +75,10 @@ public class CRUDProfessor extends JFrame {
 		btnCadastrar.setBounds(27, 187, 157, 32);
 		contentPane.add(btnCadastrar);
 		
-		JButton btnLimpar = new JButton("Limpar");
-		btnLimpar.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		btnLimpar.setBounds(215, 187, 157, 32);
-		contentPane.add(btnLimpar);
+		JButton btnVoltar = new JButton("Fechar");
+		btnVoltar.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+		btnVoltar.setBounds(215, 187, 157, 32);
+		contentPane.add(btnVoltar);
 		
 		addPlaceholder(tfNome, " Nome");
 		addPlaceholder(tfArea, " Área de conhecimento");
@@ -87,7 +87,7 @@ public class CRUDProfessor extends JFrame {
 		ProfessorController profCtrl = new ProfessorController(tfNome, tfCPF, tfArea, tfPontos);
 		
 		btnCadastrar.addActionListener(profCtrl);
-		btnLimpar.addActionListener(e -> limparCampos());
+		btnVoltar.addActionListener(e -> dispose());
 		btnConsultar.addActionListener(profCtrl);
 		
 		profCtrl.setTela(this);

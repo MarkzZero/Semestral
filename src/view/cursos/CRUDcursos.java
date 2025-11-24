@@ -59,10 +59,10 @@ public class CRUDcursos extends JFrame {
 		btnCadastrar.setBounds(24, 208, 148, 29);
 		contentPane.add(btnCadastrar);
 		
-		JButton btnLimpar = new JButton("Limpar");
-		btnLimpar.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		btnLimpar.setBounds(240, 208, 148, 29);
-		contentPane.add(btnLimpar);
+		JButton btnFechar = new JButton("Fechar");
+		btnFechar.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+		btnFechar.setBounds(240, 208, 148, 29);
+		contentPane.add(btnFechar);
 		
 		JButton btnConsultar = new JButton("Consultar");
 		btnConsultar.setFont(new Font("Segoe UI", Font.PLAIN, 11));
@@ -71,11 +71,17 @@ public class CRUDcursos extends JFrame {
 		
 		CursoController cursoCtrl = new CursoController(tfCodCurso, tfNomeCurso, tfArea);
 		
+		JButton btnDisciplinas = new JButton("Consultar disciplinas");
+		btnDisciplinas.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+		btnDisciplinas.setBounds(240, 87, 148, 29);
+		contentPane.add(btnDisciplinas);
+		
 		cursoCtrl.setTela(this);
 		
 		btnCadastrar.addActionListener(cursoCtrl);
-		btnLimpar.addActionListener(e -> limparCampos());
 		btnConsultar.addActionListener(cursoCtrl);
+		btnDisciplinas.addActionListener(cursoCtrl);
+		btnFechar.addActionListener(e -> dispose());
 		
 		SwingUtilities.invokeLater(() -> {
 		    btnConsultar.requestFocusInWindow();

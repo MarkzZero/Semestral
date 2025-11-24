@@ -90,10 +90,10 @@ public class CRUDdisciplinas extends JFrame {
 		btnCadastrar.setBounds(27, 237, 157, 32);
 		contentPane.add(btnCadastrar);
 		
-		JButton btnLimpar = new JButton("Limpar");
-		btnLimpar.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		btnLimpar.setBounds(215, 237, 157, 32);
-		contentPane.add(btnLimpar);
+		JButton btnFechar = new JButton("Fechar");
+		btnFechar.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+		btnFechar.setBounds(215, 237, 157, 32);
+		contentPane.add(btnFechar);
 		
 		JButton btnInscritos = new JButton("Consultar inscritos");
 		btnInscritos.setFont(new Font("Segoe UI", Font.PLAIN, 11));
@@ -112,7 +112,7 @@ public class CRUDdisciplinas extends JFrame {
 		discCtrl.setTela(this);
 		btnCadastrar.addActionListener(discCtrl);
 		btnConsultar.addActionListener(discCtrl);
-		btnLimpar.addActionListener( e -> limparCampos());
+		btnFechar.addActionListener( e -> dispose());
 		btnInscritos.addActionListener(discCtrl);
 	}
 	

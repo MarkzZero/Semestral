@@ -1,7 +1,6 @@
-package view.disciplinas;
+package view.processos;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 
@@ -16,22 +15,20 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
+import controller.curso.CursoController;
+import controller.disciplinas.disciplinaController;
+import controller.inscricoes.inscricoesController;
 import lista.Lista;
 import model.cursos.Curso;
 import model.disciplina.Disciplina;
 import model.disciplina.DisciplinaProcesso;
 import model.inscrito.Inscrito;
-import repository.CursoRepository;
-import repository.DisciplinaRepository;
-import repository.InscritoRepository;
 import tabela.TabelaHash;
 
 public class ProcessosAbertos extends JFrame {
     
 
 	private static final long serialVersionUID = 1L;
-	private String path = "C:\\temp";
-    
 
     public ProcessosAbertos() {
         setTitle("Processos Seletivos Abertos");
@@ -47,28 +44,27 @@ public class ProcessosAbertos extends JFrame {
         painelRodape.add(btnFechar);
         getContentPane().add(painelRodape, BorderLayout.SOUTH);
         
-        carregarDados();
     }
     
 
     
-    private void carregarDados() {
+    public boolean carregarDados() {
         try {
             TabelaHash<DisciplinaProcesso> tabela = new TabelaHash<>();
             
-            InscritoRepository rInscrito = new InscritoRepository(path);
-            DisciplinaRepository rDisciplina = new DisciplinaRepository(path);
-            CursoRepository rCurso = new CursoRepository(path);
+            inscricoesController inscCtrl = new inscricoesController(null, null);
+            disciplinaController discCtrl = new disciplinaController(null, null, null, null, null, null);
+            CursoController cursoCtrl = new CursoController(null, null, null);
             
-            Lista<Inscrito> inscricoes = rInscrito.readFile("inscricoes.csv");
+            Lista<Inscrito> inscricoes = inscCtrl.readFile("inscricoes.csv");
             
             for (int i = 0; i < inscricoes.size(); i++) {
                 Inscrito inscricao = inscricoes.get(i);
                 
-                Disciplina disc = rDisciplina.buscarDisciplina(inscricao.getCodDisciplina());
+                Disciplina disc = discCtrl.buscarDisciplina(inscricao.getCodDisciplina());
                 
                 if (disc != null) {
-                    Curso curso = rCurso.buscar(disc.getCodCurso());
+                    Curso curso = cursoCtrl.buscarCurso(disc.getCodCurso());
                     
                     if (curso != null) {
                         DisciplinaProcesso dp = new DisciplinaProcesso(
@@ -82,7 +78,6 @@ public class ProcessosAbertos extends JFrame {
                             curso.getArea()
                         );
                         
-                        // Insere na tabela hash (não duplica)
                         tabela.inserir(disc.getCodDisc(), dp);
                     }
                 }
@@ -96,18 +91,20 @@ public class ProcessosAbertos extends JFrame {
                     "Aviso", 
                     JOptionPane.INFORMATION_MESSAGE);
                 dispose();
-                return;
+                return false;
+                
             }
             
-            // Cria e preenche a tabela visual
             exibirTabela(disciplinas);
-            
+            return true;
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, 
                 "Erro ao carregar processos: " + e.getMessage(), 
                 "Erro", 
                 JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
+            
+            return false;
         }
     }
 
@@ -175,6 +172,13 @@ public class ProcessosAbertos extends JFrame {
         
         getContentPane().add(painelCentral, BorderLayout.CENTER);
     }
-    
+ 
+    public void setDisciplinas(Lista<DisciplinaProcesso> disciplinas) {
+        try {
+            exibirTabela(disciplinas); 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
 

@@ -1,4 +1,4 @@
-package controller.disciplinas;
+package controller.processo;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 
 import controller.curso.CursoController;
+import controller.disciplinas.disciplinaController;
 import controller.inscricoes.inscricoesController;
 import lista.Lista;
 import model.cursos.Curso;
@@ -13,11 +14,9 @@ import model.disciplina.Disciplina;
 import model.disciplina.DisciplinaProcesso;
 import model.inscrito.Inscrito;
 import tabela.TabelaHash;
-import view.disciplinas.ProcessosAbertos;
+import view.processos.ProcessosAbertos;
 
 public class ProcessosController implements ActionListener{
-	
-	final private String path = "C:\\temp";
 	
 	public ProcessosController() {
 	}
@@ -25,7 +24,6 @@ public class ProcessosController implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
-		
 		if(cmd.equals("Consultar processos abertos")) {
 			ConsultarProcessos();
 		}
@@ -71,6 +69,7 @@ public class ProcessosController implements ActionListener{
 	        }
 	        
 	        ProcessosAbertos tela = new ProcessosAbertos();
+	        tela.setDisciplinas(disciplinas); 
 	        tela.setVisible(true);
 	        
 	    } catch (Exception e) {

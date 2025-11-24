@@ -13,17 +13,19 @@ import java.io.PrintWriter;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import controller.curso.CursoController;
 import controller.inscricoes.inscricoesController;
 import controller.professor.ProfessorController;
 import fila.Fila;
 import lista.Lista;
+import model.cursos.Curso;
 import model.disciplina.Disciplina;
 import model.inscrito.Inscrito;
 import model.inscrito.InscritoDTO;
 import model.professor.Professor;
 import view.disciplinas.CRUDdisciplinas;
 import view.disciplinas.Consultar;
-import view.disciplinas.Inscritos;
+import view.inscritos.Inscritos;
 
 public class disciplinaController implements ActionListener {
 	
@@ -58,7 +60,12 @@ public class disciplinaController implements ActionListener {
 		String cmd = e.getActionCommand();
 		
 		if(cmd.equals("Cadastrar")) {
-			cadastro();
+			try {
+				cadastro();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 		if(cmd.equals("Editar")) {
 			editar();
@@ -76,13 +83,19 @@ public class disciplinaController implements ActionListener {
 
 	private void consultarInscritos() {
 		String codDisciplina = tfcodDisciplina.getText().trim();
+	    File file = new File(path, "inscricoes.csv");
+	    
+	    if(!file.exists()) {
+	    	JOptionPane.showMessageDialog(null, "Nenhum inscrito cadastrado!", "Aviso", JOptionPane.WARNING_MESSAGE);
+	    	return;
+	    }
+	    
 		Lista<InscritoDTO> listaDTO = listarInscritos(codDisciplina);
-		
 		if(!listaDTO.isEmpty()) {
 			Inscritos telaInscritos = new Inscritos(listaDTO);
 			telaInscritos.setVisible(true);
 		}else {
-			JOptionPane.showMessageDialog(null, "Nenhum inscrito cadastrado para esta disciplina");
+			JOptionPane.showMessageDialog(null, "Nenhum inscrito cadastrado para esta disciplina", "Aviso", JOptionPane.WARNING_MESSAGE);
 		}
 	}
 	
@@ -90,7 +103,7 @@ public class disciplinaController implements ActionListener {
 		inscricoesController inscCtrl = new inscricoesController(tfDiaSemana, tfDiaSemana);
 		ProfessorController profCtrl = new ProfessorController(null, null, null, null);
 		Lista<InscritoDTO> listaDTO = new Lista<>();
-	    
+		
 	    try{
 	        Lista<Inscrito> listaInscritos = inscCtrl.readFile("inscricoes.csv");
 	        
@@ -136,7 +149,7 @@ public class disciplinaController implements ActionListener {
 				Consultar tela = new Consultar(encontrado);
 				tela.setVisible(true);
 			}else {
-				JOptionPane.showMessageDialog(null, "Código de curso não cadastrado");
+				JOptionPane.showMessageDialog(null, "Código de disciplina não cadastrado", "Aviso", JOptionPane.WARNING_MESSAGE);
 			}
 			
 		}catch(Exception e) {
@@ -146,13 +159,13 @@ public class disciplinaController implements ActionListener {
 			
 	}
 
-	private void deletar() {
+	public void deletar() {
+		File fileInsc = new File(path, "Inscricoes.csv");
 		String codDisc = tfcodDisciplina.getText().trim();
 		inscricoesController inscCtrl = new inscricoesController(null , null);
 		
 		try {
-			Lista<Disciplina> lista = readFile("disciplinas.csv");
-			Lista<Inscrito> listaInsc = inscCtrl.readFile("disciplinas.csv");
+			Lista<Disciplina> lista = readFile(fileName);
 			int tamanho = lista.size();
 			for(int i = 0; i < tamanho; i++) {
 				if(lista.get(i).getCodDisc().equals(codDisc)) {
@@ -161,14 +174,18 @@ public class disciplinaController implements ActionListener {
 				}
 			}
 			
-			tamanho = listaInsc.size();
-			for (int i = 0; i < tamanho; i++) {
-				if(listaInsc.get(i).getCodDisciplina().equals(codDisc)) {
-					listaInsc.remove(i);
+			if(fileInsc.exists()) {
+				Lista<Inscrito> listaInsc = inscCtrl.readFile("inscricoes.csv");
+				tamanho = listaInsc.size();
+				for (int i = 0; i < tamanho; i++) {
+					if(listaInsc.get(i).getCodDisciplina().equals(codDisc)) {
+						listaInsc.remove(i);
+					}
 				}
+				
+				inscCtrl.salvarLista(listaInsc);
 			}
 			
-			inscCtrl.salvarLista(listaInsc);
 			salvarLista(lista);
 			JOptionPane.showMessageDialog(null, "Disciplina removida com sucesso!");
 		}catch(Exception e) {
@@ -213,8 +230,11 @@ public class disciplinaController implements ActionListener {
 	    }
 	}
 
-	private void cadastro() {
-		File file = new File(path, "disciplinas.csv");
+	private void cadastro() throws Exception {
+		CursoController cursoCtrl = new CursoController(null, null, null);
+		boolean cursoExiste = false;
+		File file = new File(path, fileName);
+		File fileCurso = new File(path, "cursos.csv");
 		
 		String codDisc = tfcodDisciplina.getText().trim();
 		String nomeDisc = tfnomeDisciplina.getText().trim();
@@ -228,13 +248,37 @@ public class disciplinaController implements ActionListener {
 			return;
 		}
 
+		if(fileCurso.exists()) {
+			try {
+				Lista<Curso> listaCurso = cursoCtrl.readFile("cursos.csv");
+				int tamanho = listaCurso.size();
+				
+				for(int i = 0; i < tamanho; i++) {
+					if(listaCurso.get(i).getCodCurso().equals(codCurso)) {
+						cursoExiste = true;
+						break;
+					}
+				}
+				
+				if(!cursoExiste) {
+					JOptionPane.showMessageDialog(null, "Código de curso inválido!", "Aviso", JOptionPane.WARNING_MESSAGE);
+					return;
+					
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+		}else {
+			JOptionPane.showMessageDialog(null, "Código de curso inválido!", "Aviso", JOptionPane.WARNING_MESSAGE);
+			return;
+		}
 		
-		String arqName = "disciplinas.csv";
 		String conteudo = codDisc + ";" + nomeDisc + ";" + diaSemana + ";" + horaInicial + ";" + quantidadeHoras + ";" + codCurso + "\n";
 		
 		if(file.exists()) {
 			try {
-				Lista<Disciplina> lista = readFile(arqName);
+				Lista<Disciplina> lista = readFile(fileName);
 				int tamanho = lista.size();
 				for(int i = 0; i < tamanho; i++) {
 					Disciplina d = lista.get(i);
@@ -250,7 +294,7 @@ public class disciplinaController implements ActionListener {
 		}
 		
 		try {
-			createFile(arqName, conteudo);
+			createFile(fileName, conteudo);
 			JOptionPane.showMessageDialog(null, "Disciplina cadastrada com sucesso!", null, JOptionPane.INFORMATION_MESSAGE);
 			tela.limparCampos();
 		}catch(Exception e) {
@@ -259,7 +303,7 @@ public class disciplinaController implements ActionListener {
 		}
 	}
 	
-	private void salvarLista(Lista<Disciplina> lista) throws Exception{
+	public void salvarLista(Lista<Disciplina> lista) throws Exception{
 		File file = new File(path, fileName);
 		FileWriter fw = new FileWriter(file, false);
 		PrintWriter pw = new PrintWriter(fw);
@@ -278,7 +322,7 @@ public class disciplinaController implements ActionListener {
 	public Disciplina buscarDisciplina(String codDisc) {
 		Fila<Disciplina> fila = new Fila<>();
 		try {
-			Lista<Disciplina> lista = readFile("disciplinas.csv");
+			Lista<Disciplina> lista = readFile(fileName);
 			Fila<Disciplina> fila_ = popularFila(fila, lista);
 			
 			int tamanho = fila_.size();
@@ -378,7 +422,7 @@ public class disciplinaController implements ActionListener {
 		
 	}
 	
-	private Lista<Disciplina> readFile(String nome) throws IOException {
+	public Lista<Disciplina> readFile(String nome) throws IOException {
 	    File file = new File(path, nome);
 	    Lista<Disciplina> listaDisc= new Lista<>();
 

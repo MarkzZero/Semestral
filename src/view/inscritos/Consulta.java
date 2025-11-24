@@ -26,6 +26,7 @@ public class Consulta extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		setLocationRelativeTo(null);
 		
 		cpf = new JTextField(inscrito.getCpf());
 		cpf.setFont(new Font("Segoe UI", Font.PLAIN, 11));
@@ -53,6 +54,8 @@ public class Consulta extends JFrame {
 		
 		btnDeletar.addActionListener(inscCtrl);
 		btnDeletar.addActionListener(e -> dispose());
+		btnEditar.addActionListener(inscCtrl);
+		btnEditar.addActionListener(e -> dispose());
 
 	}
 }

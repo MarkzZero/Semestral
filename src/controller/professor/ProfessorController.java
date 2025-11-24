@@ -27,6 +27,7 @@ public class ProfessorController implements ActionListener{
     CRUDProfessor tela;
     
     final String path = "C:\\temp";
+    final String fileName = "professor.csv";
     
     
 	public ProfessorController(JTextField nome, JTextField cpf, JTextField area, JTextField qpontos) {
@@ -54,7 +55,7 @@ public class ProfessorController implements ActionListener{
 			deletar();
 		}
 		if(cmd.equals("Buscar professor")) {
-			File file = new File(path, "professor.csv");
+			File file = new File(path, fileName);
 			
 			if(file.exists()) {
 				consultar();
@@ -75,7 +76,7 @@ public class ProfessorController implements ActionListener{
 				Consulta tela = new Consulta(encontrado);
 				tela.setVisible(true);
 			}else {
-				JOptionPane.showMessageDialog(null, "CPF não cadastrado");
+				JOptionPane.showMessageDialog(null, "CPF não cadastrado", "Aviso", JOptionPane.WARNING_MESSAGE);
 			}
 			
 		}catch(Exception e) {
@@ -88,7 +89,6 @@ public class ProfessorController implements ActionListener{
 
 
 	private void deletar() {
-		String fileName = "professor.csv";
 		String cpf = tfCPF.getText().trim();
 		
 		try {
@@ -111,9 +111,7 @@ public class ProfessorController implements ActionListener{
 		
 	}
 
-	private void editar() {
-		String fileName = "professor.csv";
-		
+	private void editar() {		
 		String cpf = tfCPF.getText().trim();
 		String nome = tfNome.getText().trim();
 		String area = tfArea.getText().trim();
@@ -166,20 +164,19 @@ public class ProfessorController implements ActionListener{
 	        return;
 	    }
 
-	    String ArqNome = "professor.csv";
 	    String conteudo = cpf + ";" + nome + ";" + area + ";" + Qpontos + "\n";
-	    File file = new File(path, ArqNome);
+	    File file = new File(path, fileName);
 	    
 	    if(file.exists()) {
 	    	try {
-		    	Lista<Professor> lista = readFile(ArqNome);
+		    	Lista<Professor> lista = readFile(fileName);
 		    	int tamanho = lista.size();
 		    	
 		    	for(int i = 0; i < tamanho; i++) {
 		    		Professor p = lista.get(i);
 		    		
 		    		if(p.getCpf().equals(cpf)) {
-		    			JOptionPane.showMessageDialog(null, "CPF já cadastrado!");
+		    			JOptionPane.showMessageDialog(null, "CPF já cadastrado!", "Aviso", JOptionPane.WARNING_MESSAGE);
 		    			return;
 		    		}
 		    	}
@@ -190,7 +187,7 @@ public class ProfessorController implements ActionListener{
 	    
 	    
 	    try {
-	        createFile(ArqNome, conteudo);
+	        createFile(fileName, conteudo);
 	        JOptionPane.showMessageDialog(null, "Professor cadastrado com sucesso!");
 	        tela.limparCampos();
 	    } catch (IOException e) {
@@ -218,7 +215,7 @@ public class ProfessorController implements ActionListener{
 	public Professor buscarProfessor(String cpf) {		
 		Fila<Professor> fila = new Fila<>();
 		try {
-			Lista<Professor> lista = readFile("professor.csv");
+			Lista<Professor> lista = readFile(fileName);
 			Fila<Professor> fila_ = popularFila(fila, lista);
 			int tamanho = fila_.size();
 			for(int i = 0; i < tamanho; i++) {
@@ -268,7 +265,7 @@ public class ProfessorController implements ActionListener{
 		
 	}
 
-	private Lista<Professor> readFile(String nome) throws IOException {
+	public Lista<Professor> readFile(String nome) throws IOException {
 	    File file = new File(path, nome);
 	    Lista<Professor> listaProfessor = new Lista<>();
 
